@@ -1,1 +1,49 @@
+// Simulador de oferta y demanda - version Arduino UNO R3
+// El Arduino calcula el precio y lo manda por USB.
+// La computadora (script de PowerShell) envia la alerta a Make.
 
+const int PIN_DEMANDA = A0;
+const int PIN_OFERTA  = A1;
+const int LED_ESCASEZ = 13;                // LED integrado de la placa
+const unsigned long ESPERA_ALERTA = 60000; // maximo 1 alerta por minuto
+
+bool enEscasez = false;
+bool primeraAlerta = true;
+unsigned long ultimaAlerta = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(LED_ESCASEZ, OUTPUT);
+  Serial.println("Simulador listo");
+}
+
+void loop() {
+  int demanda = map(analogRead(PIN_DEMANDA), 0, 1023, 10, 90);
+  int oferta  = map(analogRead(PIN_OFERTA), 0, 1023, 10, 90);
+
+  // Modelo lineal: demanda P = a - Q ; oferta P = Q - b
+  int a = 100 + demanda;
+  int b = oferta - 50;
+  int precio = ((a - b) / 2) * 4; // pesos por kilo
+
+  Serial.print("Demanda: "); Serial.print(demanda);
+  Serial.print("  Oferta: "); Serial.print(oferta);
+  Serial.print("  Precio: $"); Serial.println(precio);
+
+  bool escasez = (demanda - oferta) >= 25;
+  digitalWrite(LED_ESCASEZ, escasez ? HIGH : LOW);
+
+  if (escasez && !enEscasez &&
+      (primeraAlerta || millis() - ultimaAlerta > ESPERA_ALERTA)) {
+    // Linea especial que lee la computadora para avisar a Make
+    Serial.print("ALERTA,");
+    Serial.print(demanda); Serial.print(",");
+    Serial.print(oferta);  Serial.print(",");
+    Serial.println(precio);
+    ultimaAlerta = millis();
+    primeraAlerta = false;
+  }
+  enEscasez = escasez;
+
+  delay(500);
+}
