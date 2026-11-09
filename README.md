@@ -6,4 +6,5 @@
 <img width="500" height="300" alt="WhatsApp Image 2026-11-09 at 12 22 14 PM" src="https://github.com/user-attachments/assets/39022df3-5706-4b78-8ece-ede497cce7a5" />
 
 ## Video
+[Ver video en Youtube](https://youtube.com/shorts/LPa5ZmDesmw?feature=share)
 ## Resultados
