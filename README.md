@@ -8,3 +8,4 @@
 ## Video
 [Ver video en Youtube](https://youtube.com/shorts/LPa5ZmDesmw?feature=share)
 ## Resultados
+[Ver Resultados](https://github.com/JoseReyes1603/Simulador_Oferta_Demanda/blob/main/Resultados/Practica_4.1_Simulador_Oferta_Demanda.pdf)
